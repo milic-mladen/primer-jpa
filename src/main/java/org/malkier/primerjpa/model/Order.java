@@ -34,6 +34,6 @@ public class Order {
 
     public void removeItem(OrderItem item) {
         items.remove(item);
-        item.setOrder(null);
+        item.setOrder(null); //vazno da bi hibernate prepoznao orphan
     }
 }

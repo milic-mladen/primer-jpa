@@ -8,6 +8,8 @@ import org.malkier.primerjpa.model.Customer;
 import org.malkier.primerjpa.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
@@ -18,8 +20,14 @@ public class CustomerService {
 //        return customerRepository.findById(id).orElseThrow(() -> new RuntimeException("Customer not found"));
 //    }
 
+    @Transactional
+    public List<Customer>getAllCustomers(){
+        List<Customer>customers= customerRepository.pronadjiKupce();
+        customers.forEach(customer -> customer.getOrders().size());
+        return customers;
+    }
 
-    //pokazi sa i bez transactional anotacije(bez ce isto bacati exception)
+
     //da li bi radilo i bez transactionala?
     @Transactional
     public Customer getCustomerById(Long id) {
@@ -34,6 +42,7 @@ public class CustomerService {
     }
     @Transactional
     public void demonstrateLifecycle() {
+
         // Transient objekat (nije povezan sa bazom)
         Customer transientCustomer = new Customer();
         transientCustomer.setName("Transient Customer");
@@ -52,15 +61,16 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
         System.out.println("Persistent state (after find): " + persistentCustomer);
     }
-    @Transactional
     public void demonstrateDetachedIssue() {
         // Učitaj objekat iz baze (Persistent state)
         Customer customer = customerRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
         // Odvajanje objekta (Detached state)
+        //*prekid sesije
+        //*rucno detachovanje
         entityManager.detach(customer);
-
+        //ne baca exception jer
         try {
             // Pokušaj da se izvrši operacija nad detached objektom
             customer.setName("Updated Name");

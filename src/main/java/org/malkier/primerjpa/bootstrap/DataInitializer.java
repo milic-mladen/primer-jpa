@@ -16,15 +16,12 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Kreiraj inicijalnog kupca
         Customer customer = new Customer();
         customer.setName("Test Customer");
 
-        // Kreiraj narudžbinu
         Order order = new Order();
         order.setDescription("First Order");
 
-        // Dodaj stavke narudžbine
         OrderItem item1 = new OrderItem();
         item1.setName("Item 1");
         order.addItem(item1);
@@ -33,10 +30,9 @@ public class DataInitializer implements CommandLineRunner {
         item2.setName("Item 2");
         order.addItem(item2);
 
-        // Poveži narudžbinu sa kupcem
         customer.getOrders().add(order);
-order.setCustomer(customer);
-        // Sačuvaj kupca (kaskadno će sačuvati i narudžbine i stavke)
+        order.setCustomer(customer);
+
         customerRepository.save(customer);
 
         System.out.println("Inicijalni podaci su uspešno dodati u bazu.");
