@@ -3,7 +3,6 @@ package org.malkier.primerjpa.service;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.malkier.primerjpa.model.Customer;
 import org.malkier.primerjpa.repository.CustomerRepository;

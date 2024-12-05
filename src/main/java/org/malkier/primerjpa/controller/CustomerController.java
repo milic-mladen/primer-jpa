@@ -1,7 +1,5 @@
 package org.malkier.primerjpa.controller;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.malkier.primerjpa.model.Customer;
 import org.malkier.primerjpa.model.Order;
