@@ -22,7 +22,7 @@ public class CustomerService {
 
     @Transactional
     public List<Customer>getAllCustomers(){
-        List<Customer>customers= customerRepository.pronadjiKupce();
+        List<Customer>customers= customerRepository.findCustomers();
         customers.forEach(customer -> customer.getOrders().size());
         return customers;
     }
@@ -35,7 +35,7 @@ public class CustomerService {
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
 
-        // Eksplicitno učitavanje lazy polja
+
         customer.getOrders().size(); // Osigurava da se 'orders' učita pre zatvaranja Session-a
 
         return customer;
@@ -62,33 +62,25 @@ public class CustomerService {
         System.out.println("Persistent state (after find): " + persistentCustomer);
     }
     public void demonstrateDetachedIssue() {
-        // Učitaj objekat iz baze (Persistent state)
         Customer customer = customerRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
-        // Odvajanje objekta (Detached state)
-        //*prekid sesije
-        //*rucno detachovanje
+
         entityManager.detach(customer);
-        //ne baca exception jer
         try {
-            // Pokušaj da se izvrši operacija nad detached objektom
             customer.setName("Updated Name");
-            customerRepository.save(customer); // Ovo izaziva grešku
+            customerRepository.save(customer);
         } catch (Exception e) {
             System.out.println("Exception with detached object: " + e.getMessage());
         }
     }
     @Transactional
     public void fixDetachedIssue() {
-        // Učitaj objekat iz baze (Persistent state)
         Customer customer = customerRepository.findById(1L)
                 .orElseThrow(() -> new RuntimeException("Customer not found"));
 
-        // Odvajanje objekta (Detached state)
         entityManager.detach(customer);
 
-        // Rešenje: merge objekta
         Customer mergedCustomer = entityManager.merge(customer);
         mergedCustomer.setName("Updated Name");
         System.out.println("Fixed detached issue with merge: " + mergedCustomer);

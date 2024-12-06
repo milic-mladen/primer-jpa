@@ -20,11 +20,11 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")
-    @JsonIgnore // Sprečava beskonačnu rekurziju
+    @JsonIgnore
     private Customer customer;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore//sprecavamo jackson da serijalizuje
+    @JsonIgnore
     private List<OrderItem> items = new ArrayList<>();
 
     public void addItem(OrderItem item) {
@@ -34,6 +34,6 @@ public class Order {
 
     public void removeItem(OrderItem item) {
         items.remove(item);
-        item.setOrder(null); //vazno da bi hibernate prepoznao orphan
+        item.setOrder(null);
     }
 }
